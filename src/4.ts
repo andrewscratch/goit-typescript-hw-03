@@ -1,48 +1,52 @@
-class Key {}
+class Key {
+   private _id: number;
 
-class MyHouse {
-  private doorIsOpen: boolean = false;
-  private readonly keyForHouse: Key;
-
-  constructor(key: Key) {
-    this.keyForHouse = key;
-  }
-
-  openDoor(key: Key): void {
-    if (key === this.keyForHouse) {
-      this.doorIsOpen = true;
-      console.log("Door is now open!");
-    } else {
-      console.log("Wrong key! Door remains closed.");
+    constructor(id: number) {
+        this._id = id;
     }
-  }
 
-  comeIn(person: Person): void {
-    if (this.doorIsOpen) {
-      console.log(`${person.getName()} has entered the house.`);
-    } else {
-      console.log("Door is closed. Can't come in!");
+    get id(): number {
+        return this._id;
     }
-  }
+}
+
+abstract class House {
+    protected _key: Key;
+
+    constructor(key: Key) {
+        this._key = key;
+    }
+
+    abstract openDoor(key: Key): void;
+
+    comeIn(person: Person): void {
+        console.log(`Person has entered the house.`);
+    }
+}
+
+class MyHouse extends House {
+    openDoor(key: Key): void {
+        if (this._key === key) {
+            console.log('Door is opened.');
+        } else {
+            console.log('Wrong key. Door remains closed.');
+        }
+    }
 }
 
 class Person {
-  private readonly myKey: Key;
+    private _key: Key;
 
-  constructor(key: Key) {
-    this.myKey = key;
-  }
+    constructor(key: Key) {
+        this._key = key;
+    }
 
-  getKey(): Key {
-    return this.myKey;
-  }
-
-  getName(): string {
-    return "John";
-  }
+    getKey(): Key {
+        return this._key;
+    }
 }
 
-const key = new Key();
+const key = new Key(1);
 const house = new MyHouse(key);
 const person = new Person(key);
 
